@@ -13596,4 +13596,10 @@
     <!-- Battery stats reset -->
     <string name="battery_stats_reset">Clear usage data?</string>
     <string name="battery_stats_message">Battery usage data will be reset</string>
+
+    <!-- Cutout force fullscreen -->
+    <string name="display_cutout_force_fullscreen_title">Full screen apps</string>
+    <string name="display_cutout_force_fullscreen_summary">Ignore notch space for selected applications</string>
+    <string name="display_cutout_force_fullscreen_restart_app">Please restart the application to apply the changes.</string>
+    <string name="display_cutout_force_fullscreen_no_apps">Loading / No apps</string>
 </resources>
