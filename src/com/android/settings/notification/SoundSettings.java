@@ -19,12 +19,14 @@ package com.android.settings.notification;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.UserHandle;
 import android.preference.SeekBarVolumizer;
+import android.provider.Settings;
 import android.text.TextUtils;
 
 import androidx.annotation.VisibleForTesting;
@@ -37,6 +39,7 @@ import com.android.settings.core.OnActivityResultListener;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.sound.HandsFreeProfileOutputPreferenceController;
+import com.android.settings.support.SystemSettingSwitchPreference;
 import com.android.settings.widget.PreferenceCategoryController;
 import com.android.settingslib.core.AbstractPreferenceController;
 import com.android.settingslib.core.instrumentation.Instrumentable;
@@ -55,6 +58,8 @@ public class SoundSettings extends DashboardFragment implements OnActivityResult
     private static final String SELECTED_PREFERENCE_KEY = "selected_preference";
     private static final int REQUEST_CODE = 200;
     private static final int SAMPLE_CUTOFF = 2000;  // manually cap sample playback at 2 seconds
+
+    private static final String KEY_VOL_PANEL_ON_LEFT = "volume_panel_on_left";
 
     @VisibleForTesting
     static final int STOP_SAMPLE = 1;
@@ -77,6 +82,7 @@ public class SoundSettings extends DashboardFragment implements OnActivityResult
     private UpdatableListPreferenceDialogFragment mDialogFragment;
     private String mHfpOutputControllerKey;
     private String mVibrationPreferencesKey = "vibration_preference_screen";
+    private SystemSettingSwitchPreference mVolPanelOnLeft;
 
     @Override
     public int getMetricsCategory() {
@@ -97,6 +103,24 @@ public class SoundSettings extends DashboardFragment implements OnActivityResult
                             .findFragmentByTag(TAG);
             mDialogFragment = dialogFragment;
         }
+
+        Resources systemUiResources;
+        try {
+            systemUiResources =
+                    getPackageManager().getResourcesForApplication("com.android.systemui");
+        } catch (Exception e) {
+            return;
+        }
+
+        // default vol panel on left value
+        final boolean defaultPanelOnLeft =
+                systemUiResources.getBoolean(systemUiResources.getIdentifier(
+                "com.android.systemui:bool/config_audioPanelOnLeftSide", null, null));
+
+        mVolPanelOnLeft = (SystemSettingSwitchPreference) findPreference(KEY_VOL_PANEL_ON_LEFT);
+        boolean mVolPanelOnLeftValue = Settings.System.getInt(getContext().getContentResolver(),
+                Settings.System.VOLUME_PANEL_ON_LEFT, defaultPanelOnLeft ? 1 : 0) == 1;
+        mVolPanelOnLeft.setChecked(mVolPanelOnLeftValue);
     }
 
     @Override
