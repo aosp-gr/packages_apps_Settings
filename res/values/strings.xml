@@ -14196,4 +14196,8 @@
     <string name="max_refresh_rate_title">Maximum refresh rate</string>
     <string name="preferred_refresh_rate_title">Preferred refresh rate</string>
     <string name="preferred_refresh_rate_info">Preferred refresh rate will be used as the default refresh rate for user interactions, as long as it\'s not lower than the minimum refresh rate and not higher than the maximum refresh rate.</string>
+
+     <!-- Quick Settings quick pulldown -->
+    <string name="quick_settings_quick_pull_down_title">Quick QS pulldown</string>
+    <string name="quick_settings_quick_pull_down_summary">Pull down statusbar from right side to expand quick settings</string>
 </resources>
