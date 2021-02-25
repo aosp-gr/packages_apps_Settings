@@ -4,7 +4,6 @@
     <bool name="config_face_settings_should_manage_preview">true</bool>
     <bool name="config_keep_contextual_card_dismissal_timestamp">true</bool>
     <bool name="config_night_light_suggestion_enabled">false</bool>
-    <bool name="config_show_adaptive_connectivity">true</bool>
     <bool name="config_show_avatar_in_homepage">true</bool>
     <bool name="config_show_device_header_in_device_info">false</bool>
     <bool name="config_show_smart_storage_toggle">false</bool>
