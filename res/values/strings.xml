@@ -14262,4 +14262,9 @@
     <!-- Low battery light -->
     <string name="low_battery_light_title">Low battery light</string>
     <string name="low_battery_light_summary">Blink LED when battery is low</string>
+
+    <!-- Default getTimeSpentInApp string for Wellbeing to display. [CHAR LIMIT=NONE] -->
+    <string name="duration_less_than_one_minute">Less than 1 minute</string>
+    <!-- Summary for Wellbeing screen time usage. [CHAR LIMIT=NONE] -->
+    <string name="screen_time_summary_usage_today">%1$s today</string>
 </resources>
