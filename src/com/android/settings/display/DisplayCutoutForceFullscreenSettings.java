@@ -81,7 +81,7 @@ public class DisplayCutoutForceFullscreenSettings extends SettingsPreferenceFrag
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().getActionBar().setTitle(R.string.display_cutout_force_fullscreen_title);
+        getActivity().setTitle(R.string.display_cutout_force_fullscreen_title);
         return inflater.inflate(R.layout.cutout_force_fullscreen_layout, container, false);
     }
 
