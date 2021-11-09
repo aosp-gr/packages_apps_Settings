@@ -13612,10 +13612,6 @@
     <string name="icon_manager_title">Icon manager</string>
     <string name="icon_manager_summary">Control visibility of status bar icons</string>
 
-    <!-- Battery stats reset -->
-    <string name="battery_stats_reset">Clear usage data?</string>
-    <string name="battery_stats_message">Battery usage data will be reset</string>
-
     <!-- Cutout force fullscreen -->
     <string name="display_cutout_force_fullscreen_title">Full screen apps</string>
     <string name="display_cutout_force_fullscreen_summary">Ignore notch space for selected applications</string>

@@ -18,26 +18,18 @@ package com.android.settings.fuelgauge;
 
 import static com.android.settings.fuelgauge.BatteryBroadcastReceiver.BatteryUpdateType;
 
-import android.app.AlertDialog;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.provider.Settings.Global;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.preference.Preference;
-
-import com.android.internal.os.BatteryStatsHelper;
 
 import com.android.settings.R;
 import com.android.settings.SettingsActivity;
@@ -71,8 +63,6 @@ public class PowerUsageSummary extends PowerUsageBase implements
     static final int BATTERY_INFO_LOADER = 1;
     @VisibleForTesting
     static final int BATTERY_TIP_LOADER = 2;
-    @VisibleForTesting
-    static final int MENU_STATS_RESET = Menu.FIRST + 1;
 
     @VisibleForTesting
     PowerUsageFeatureProvider mPowerFeatureProvider;
@@ -94,10 +84,8 @@ public class PowerUsageSummary extends PowerUsageBase implements
     @VisibleForTesting
     Preference mBatteryUsagePreference;
 
-    private BatteryStatsHelper mStatsHelper;
-
     @VisibleForTesting
-    final ContentObserver mSettingsObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {
+    final ContentObserver mSettingsObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             restartBatteryInfoLoader();
@@ -114,7 +102,7 @@ public class PowerUsageSummary extends PowerUsageBase implements
                 }
 
                 @Override
-                public void onLoadFinished(@NonNull Loader<BatteryInfo> loader, BatteryInfo batteryInfo) {
+                public void onLoadFinished(Loader<BatteryInfo> loader, BatteryInfo batteryInfo) {
                     mBatteryHeaderPreferenceController.updateHeaderPreference(batteryInfo);
                     mBatteryHeaderPreferenceController.updateHeaderByBatteryTips(
                             mBatteryTipPreferenceController.getCurrentBatteryTip(), batteryInfo);
@@ -122,7 +110,7 @@ public class PowerUsageSummary extends PowerUsageBase implements
                 }
 
                 @Override
-                public void onLoaderReset(@NonNull Loader<BatteryInfo> loader) {
+                public void onLoaderReset(Loader<BatteryInfo> loader) {
                     // do nothing
                 }
             };
@@ -136,15 +124,15 @@ public class PowerUsageSummary extends PowerUsageBase implements
                 }
 
                 @Override
-                public void onLoadFinished(@NonNull Loader<List<BatteryTip>> loader,
-                                           List<BatteryTip> data) {
+                public void onLoadFinished(Loader<List<BatteryTip>> loader,
+                        List<BatteryTip> data) {
                     mBatteryTipPreferenceController.updateBatteryTips(data);
                     mBatteryHeaderPreferenceController.updateHeaderByBatteryTips(
                             mBatteryTipPreferenceController.getCurrentBatteryTip(), mBatteryInfo);
                 }
 
                 @Override
-                public void onLoaderReset(@NonNull Loader<List<BatteryTip>> loader) {
+                public void onLoaderReset(Loader<List<BatteryTip>> loader) {
 
                 }
             };
@@ -163,8 +151,6 @@ public class PowerUsageSummary extends PowerUsageBase implements
         mBatteryTipPreferenceController.setActivity(activity);
         mBatteryTipPreferenceController.setFragment(this);
         mBatteryTipPreferenceController.setBatteryTipListener(this::onBatteryTipHandled);
-
-        mStatsHelper = new BatteryStatsHelper(activity, true);
     }
 
     @Override
@@ -174,8 +160,6 @@ public class PowerUsageSummary extends PowerUsageBase implements
 
         initFeatureProvider();
         initPreference();
-
-        mStatsHelper.create(icicle);
 
         mBatteryUtils = BatteryUtils.getInstance(getContext());
 
@@ -217,38 +201,6 @@ public class PowerUsageSummary extends PowerUsageBase implements
     @Override
     protected int getPreferenceScreenResId() {
         return R.xml.power_usage_summary;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        MenuItem reset = menu.add(0, MENU_STATS_RESET, 0, R.string.battery_stats_reset)
-                .setIcon(R.drawable.ic_delete)
-                .setAlphabeticShortcut('d');
-        reset.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    private void resetStats() {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.battery_stats_reset)
-                .setMessage(R.string.battery_stats_message)
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    mStatsHelper.resetStatistics();
-                    refreshUi(BatteryUpdateType.MANUAL);
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .create()
-                .show();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == MENU_STATS_RESET) {
-            resetStats();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
