@@ -101,7 +101,7 @@ public class FingerprintEnrollFindSensor extends BiometricEnrollBase implements
 
         } else if (mCanAssumeSidefps) {
             setHeaderText(R.string.security_settings_fingerprint_enroll_find_sensor_title);
-            setDescriptionText(R.string.security_settings_fingerprint_enroll_find_sensor_message);
+            setDescriptionText(R.string.fingerprint_enroll_find_sensor_message_side);
             final LottieAnimationView lottieAnimationView = findViewById(R.id.illustration_lottie);
             final LottieAnimationView lottieAnimationViewPortrait =
                     findViewById(R.id.illustration_lottie_portrait);
@@ -122,8 +122,18 @@ public class FingerprintEnrollFindSensor extends BiometricEnrollBase implements
                     break;
             }
         } else {
+            final boolean isFrontFacingFps = getResources().getBoolean(
+                    R.bool.config_is_front_facing_fps);
+            final String fpsLocation = getString(isFrontFacingFps
+                            ? R.string.fingerprint_enroll_find_sensor_message_front
+                            : R.string.fingerprint_enroll_find_sensor_message_rear);
+
             setHeaderText(R.string.security_settings_fingerprint_enroll_find_sensor_title);
-            setDescriptionText(R.string.security_settings_fingerprint_enroll_find_sensor_message);
+            setDescriptionText(fpsLocation);
+            if (isFrontFacingFps) {
+                findViewById(R.id.fingerprint_sensor_location_front_overlay)
+                        .setVisibility(View.VISIBLE);
+            }
         }
 
         // This is an entry point for SetNewPasswordController, e.g.
