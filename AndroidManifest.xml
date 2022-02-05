@@ -3999,6 +3999,7 @@
                 </intent-filter>
                 <intent-filter>
                     <action android:name="android.settings.panel.action.BLUETOOTH" />
+                    <action android:name="android.settings.panel.action.APP_VOLUME" />
                     <category android:name="android.intent.category.DEFAULT" />
                 </intent-filter>
         </activity>
